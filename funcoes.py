@@ -104,12 +104,14 @@ class butterworth:
                     comp.append("L")
         self.comp = comp
         
+        # Transformação de Frequência
         # Para um Passa Baixa
         if self.tipo == "PB":
-            # Transformação de Frequência
             elementos = elementos / self.Wc
+        # Para um Passa Alta
         elif self.tipo == "PA":
             elementos = 1 / (elementos * self.Wc)
+        
         # Transformação de Impedância
         R = Ki
         aux = 0
@@ -119,6 +121,8 @@ class butterworth:
             elif i == "L":
                 elementos[aux] = elementos[aux] * Ki
             aux = aux + 1
+        
+        # Definição das Variáveis e Retorno
         self.R = R
         self.elementos = elementos
         return elementos, comp, R
