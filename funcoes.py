@@ -17,9 +17,9 @@ class butterworth:
         self.Ap = Ap
         self.As = As
     
+    
     # Essa função define e retorna a ordem do filtro
     def ordem(self):
-        
         if self.tipo == "PB":
             n = log10( (pow(10, (-self.As/10)) - 1) / (pow(10,(
                 -self.Ap/10)) - 1)) / (2*log10(self.Ws/self.Wp))
@@ -31,6 +31,8 @@ class butterworth:
         self.N = N
         return n, N
         
+    
+    # Essa função define e retorna a frequência de corte do filtro
     def freq_corte(self):
         if self.tipo == "PB":
             Wc = self.Wp / pow((pow(10, (-self.Ap/10))-1), (1/(2*self.N)))
@@ -39,6 +41,8 @@ class butterworth:
         self.Wc = Wc
         return Wc
     
+    
+    # Essa função define e retorna as raízes do denominador da FT
     def raizes_unit(self):
         Sk = list()
         for k in range(1, self.N + 1):
@@ -47,6 +51,8 @@ class butterworth:
         self.Sk = Sk
         return Sk
     
+    
+    # Essa função define e retorna a FT do filtro
     def func_tranf(self):
         butterworth.raizes_unit(self)
         poli = list()
@@ -73,6 +79,8 @@ class butterworth:
         self.H = H
         return H
     
+    
+    # Essa função plota os gráficos de magnitude e fase do filtro
     def plotar(self):
         # Plotagem do Módulo
         w, y, phase = signal.bode(self.H)
@@ -85,6 +93,8 @@ class butterworth:
         plt.grid(True)
         plt.plot(w, phase, 'r')
             
+    
+    # Essa função define e retorna os componenetes e seus valores do filtro
     def componentes(self, topologia, Ki):
         elementos = 2*abs(numpy.real(self.Sk))
         comp = list()

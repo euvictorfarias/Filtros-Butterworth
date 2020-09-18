@@ -28,7 +28,7 @@ print("--------------------------------------------------------------------")
 print("Seu filtro possui frequência de Corte (Wc):", Wc)
 print("--------------------------------------------------------------------")
 
-# Define e exibe raízes unitárias
+# Define e exibe Função de Transferência
 H = filtro.func_tranf()
 print("--------------------------------------------------------------------")
 print("Sua Função de Transferência H(s) é:")
@@ -55,6 +55,7 @@ if resposta == "s":
     Ki = int(input("Ki = "))
     elementos, comp, R = filtro.componentes(topologia, Ki)
     print("--------------------------------------------------------------------")
+    print("Para este filtro, você precisará dos seguintes componentes:")
     for i in range(0, N):
         print("Componente ", i+1, ": ", comp[i], i+1, " - ", elementos[i], sep=(""))
     print("Componente ", N+1, ": Rs - ", R, sep=(""))
