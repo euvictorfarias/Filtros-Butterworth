@@ -1,32 +1,64 @@
 # -*- coding: utf-8 -*-
+
 from funcoes import *
 
 # Boas Vindas
-print("\nBem Vindo(a)!\n\n")
-print("Tipos de Filtros: Passa-Baixa (PB) ou Passa-Alta (PA)")
+print("\nBem Vindo(a)!\n")
+print("--------------------------------------------------------------------")
+print("Tipos de Filtros:")
+print("(PB) - Passa-Baixa\n(PA) - Passa-Alta")
+print("(PF) - Passa-Faixa\n(RF) - Rejeita-Faixa")
+print("--------------------------------------------------------------------")
 
 # Pega o tipo de filtro e os pontos de projeto
-tipo = input("Digite o tipo que deseja: ")
+tipo = input("Digite a SIGLA do tipo que deseja: ")
 print("\nAgora vamos aos Pontos de Projeto ... ")
-Wp = float(input("Digite a Frequência de Passagem (Wp): "))
-Ws = float(input("Digite a Frequência de Rejeição (Ws): "))
-Ap = float(input("Digite a Atenuação de Passagem (Ap): "))
-As = float(input("Digite a Atenuação de Rejeição (As): "))
+if tipo == "PB" or tipo == "PA":
+    Wp = float(input("Digite a Frequência de Passagem (Wp): "))
+    Ws = float(input("Digite a Frequência de Rejeição (Ws): "))
+    Ap = float(input("Digite a Atenuação de Passagem (Ap): "))
+    As = float(input("Digite a Atenuação de Rejeição (As): "))
+elif tipo == "PF" or tipo == "RF":
+    Wp1 = float(input("Digite a Frequência de Passagem (Wp1): "))
+    Wp2 = float(input("Digite a Frequência de Passagem (Wp2): "))
+    Ws1 = float(input("Digite a Frequência de Rejeição (Ws1): "))
+    Ws2 = float(input("Digite a Frequência de Rejeição (Ws2): "))
+    Ap = float(input("Digite a Atenuação de Passagem (Ap): "))
+    As = float(input("Digite a Atenuação de Rejeição (As): "))
 
 # Inicializa um Objeto da Classe Butterworth
-filtro = butterworth(tipo, Wp, Ws, Ap, As)
+if tipo == "PB" or tipo == "PA":
+    filtro = butterworth(tipo, Wp, Ws, Ap, As)
+elif tipo == "PF" or tipo == "RF":
+    filtro = butterworth(tipo, Wp1, Ws1, Ap, As, Wp2, Ws2)
+
+print("\n--------------------------------------------------------------------")
+print("As definições do seu filtro são as seguintes:")
+print("--------------------------------------------------------------------")
 
 # Define e exibe ordem do filtro
 n, N = filtro.ordem()
-print("--------------------------------------------------------------------")
-print("Seu filtro possui a ordem (N):", N, "(", n, ")")
-print("--------------------------------------------------------------------")
+print(f'(N)  - Ordem: {N} ({n:.5f})')
 
 # Define e exibe frequência de corte
-Wc = filtro.freq_corte()
-print("--------------------------------------------------------------------")
-print("Seu filtro possui frequência de Corte (Wc):", Wc)
-print("--------------------------------------------------------------------")
+if tipo == "PB" or tipo == "PA":
+    Wc = filtro.freq_corte()
+    print(f'(Wc) - Frequência de Corte: {Wc:.5f}')
+elif tipo == "PF" or tipo == "RF":
+    Wc1, Wc2 = filtro.freq_corte()
+    print(f'(Wc1) - Frequência de Corte 1: {Wc1:.5f}')
+    print(f'(Wc2) - Frequência de Corte 2: {Wc2:.5f}')
+
+# Define e exibe frequência de ressonancia e bandas de passagem
+if tipo == "PF" or tipo == "RF":
+    Wo = filtro.freq_ress()
+    print(f'(Wo) - Frequência de Ressonância: {Wo:.5f}')
+    
+    Bp, Bs = filtro.bandas()
+    Bw = filtro.banda_corte()
+    print(f'(Bp) - Banda de Passagem: {Bp:.5f}')
+    print(f'(Bs) - Banda de Rejeição: {Bs:.5f}')
+    print(f'(Bw) - Banda de Corte: {Bw:.5f}')
 
 # Define e exibe Função de Transferência
 H = filtro.func_tranf()
@@ -45,31 +77,3 @@ elif resposta == 'n':
 else:
     print("Resposta não identificada.")
 print("--------------------------------------------------------------------\n")
-
-# Organização dos Componentes
-print("Deseja saber os valores dos componentes para este filtro?")
-resposta = input("Sim (s) ou Não (n): ")
-if resposta == "s":
-    print("Digite a topologia do circuito e a constante de proporcionalidade")
-    topologia = input("'LCL' ou 'CLC' (sem aspas): ")
-    Ki = int(input("Ki = "))
-    elementos, comp, R = filtro.componentes(topologia, Ki)
-    print("--------------------------------------------------------------------")
-    print("Para este filtro, você precisará dos seguintes componentes:")
-    for i in range(0, N):
-        print("Componente ", i+1, ": ", comp[i], i+1, " - ", elementos[i], sep=(""))
-    print("Componente ", N+1, ": Rs - ", R, sep=(""))
-    print("Componente ", N+2, ": Rl - ", R, sep=(""))
-    print("--------------------------------------------------------------------")
-
-
-
-
-
-
-
-
-
-
-
-
