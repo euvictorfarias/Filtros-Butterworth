@@ -5,7 +5,7 @@ from funcoes import *
 # Boas Vindas
 print("\nBem Vindo(a)!\n")
 print("--------------------------------------------------------------------")
-print("Tipos de Filtros:")
+print("Tipos de Filtros Butterworth:")
 print("(PB) - Passa-Baixa\n(PA) - Passa-Alta")
 print("(PF) - Passa-Faixa\n(RF) - Rejeita-Faixa")
 print("--------------------------------------------------------------------")

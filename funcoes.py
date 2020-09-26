@@ -34,18 +34,25 @@ class butterworth:
     
     # Essa função define e retorna a ordem do filtro
     def ordem(self):
-        butterworth.bandas(self)
         if self.tipo == "PB":
             n = log10( (pow(10, (-self.As/10)) - 1) / (pow(10,(
                 -self.Ap/10)) - 1)) / (2*log10(self.Ws/self.Wp))
         elif self.tipo == "PA":
             n = log10( (pow(10, (-self.As/10)) - 1) / (pow(10,(
                 -self.Ap/10)) - 1)) / (2*log10(self.Wp/self.Ws))
-        elif self.tipo == "PF" or self.tipo == "RF":
+        elif self.tipo == "PF":
+            butterworth.bandas(self)
             n1 = log10( (pow(10, (-self.As/10)) - 1) / (pow(10,(
                 -self.Ap/10)) - 1)) / (2*log10(self.Ws2/self.Wp2))
             n2 = log10( (pow(10, (-self.As/10)) - 1) / (pow(10,(
-                -self.Ap/10)) - 1)) / (2*log10(self.Wp1/self.Ws1))
+                -self.Ap/10)) - 1)) / (2*log10(self.Bp/self.Bs))
+            n = max(n1, n2)
+        elif self.tipo == "RF":
+            butterworth.bandas(self)
+            n1 = log10( (pow(10, (-self.As/10)) - 1) / (pow(10,(
+                -self.Ap/10)) - 1)) / (2*log10(self.Wp2/self.Ws2))
+            n2 = log10( (pow(10, (-self.As/10)) - 1) / (pow(10,(
+                -self.Ap/10)) - 1)) / (2*log10(self.Bs/self.Bp))
             n = max(n1, n2)
         N = ceil(n)
         self.N = N
@@ -105,15 +112,9 @@ class butterworth:
     # Essa função define e retorna a FT do filtro
     def func_tranf(self):
         butterworth.raizes_unit(self)
-        butterworth.banda_corte(self)
         poli = list()
         poli = np.poly(self.Sk)
         coefReal = poli.real
-        coef = list()
-        aux = 0
-        for i in range(-self.N, 1):
-            coef.append(coefReal[aux]*pow(self.Wc, i))
-            aux = aux + 1
         
         if self.tipo == "PB":
             num, den = signal.lp2lp(coefReal[-1], coefReal, self.Wc)
